@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NovaDesk on NovaCell</title>
+<style>
+html, body { margin: 0; height: 100%; background: #111820; font-family: system-ui, sans-serif; }
+#screen { width: 100vw; height: 100vh; display: block; touch-action: none; }
+</style>
+</head>
+<body>
+<canvas id="screen" width="960" height="600"></canvas>
+<script>
+const bootImageBase64 = "TkRJTQABAAAAAAL0eNqdVl1vmzAU/SuW90qr8BGgeWuzTcpLWinbXqapMnBJrBg7ApMmq/Lfd83XCAlttxck7vU95/jeY8MrzVi84RLojC7Vns1BiJuvQr3c2NSikmVt4jMUW/K4wuCOHYViCZ290kgpjfkEc1rtMFfEIKEwqTZmVrF4u85VKbGGfkpSCMDDtS88WYPGxT9faayEyk3WDhzbiTC7oTPPseiWV1URy00Fnd35E4se6AyfR3yerF5tGqRRmtKuSMNBG038N27C9qw6MNwOgtlhhWY7Z3BRkExjNgbnnMGZthElhWlkBRkE/jVMx3Udz663N52GHXbOuKg3GIS9/XlVtVmL6rlZqHYgn1mkSiOFSw3SSGgDbbdKrZXEd8EiEBhYyFTV8AboUMtHfN+7ii+VxiH28NvAGP4S89fwbXdylaA4FhqyPkMXGaNYHYurDHd+w+BMJw3FoBs7JsE0V3MtjJvvTZq0JqhB3bvaVnYDG4RnY7NtO3QmY1ZwOys84HmAhKS5ygjrKMitTHi2Jjxj66pNG5A9mYbWbd3yL7x/LTgvC42UG5YnLywHshO452JG9rzgSlpEqzLeWGQLx8Iiu1IUYBGsyN9RM/0/NUtFnuYkKpHrYfG4ssh3yQ/k/mFhEZWTWGWZSrg+kvnTd7JY3b+tIQyb+bp+O9+BG4fzXTZp4xX/2liNWdzwOljKQSRNsSlqlLWrLmdllLXeTlVcFpen5zw8ZvAv2JOa2Hb8t4jd0BkSxwJYfkl8Hh4jnptVbzI7wQWz3Q5jeHCH01i1edPRydg4vK4+Aw15T92PysK1ozG8Z6JE2Mlt4NUH1510ijspVbOaO939AMfKHIVLCsf5GEXovU/xZA4dqb6bPQYz0Q8wON012k1cq/VawLPeQAb9kQ/iYzP/1uTNzKfvkIf+6dfphOdcM7zl8XvOYs330DuvlcHBEJl/hso3va9sFSDmWqqunIRwSVAfietLawuwg7zu/q0xTiUNfyrYkZ5Opz92+Y4M";
+const imagePayload = {"boot": "desktop", "scenes": {"desktop": {"background": "#dfe7e4", "widgets": [{"color": "#17212b", "h": 42, "kind": "bar", "w": 960, "x": 0, "y": 0}, {"color": "#f7fbff", "kind": "text", "size": 14, "text": "NovaDesk OS", "x": 18, "y": 12}, {"color": "#b7d5ca", "kind": "text", "size": 12, "text": "NovaCell online", "x": 776, "y": 12}, {"color": "#233241", "h": 558, "kind": "rail", "w": 78, "x": 0, "y": 42}, {"h": 54, "id": "open_about", "intent": "about", "kind": "button", "label": "Info", "w": 54, "x": 12, "y": 64}, {"h": 54, "id": "open_notes", "intent": "notes", "kind": "button", "label": "Note", "w": 54, "x": 12, "y": 130}, {"h": 54, "id": "open_system", "intent": "system", "kind": "button", "label": "Sys", "w": 54, "x": 12, "y": 196}, {"h": 250, "id": "about", "kind": "panel", "title": "About NovaDesk", "w": 390, "x": 112, "y": 78}, {"color": "#111820", "kind": "text", "size": 13, "text": "Booted from a NovaDesk .ndimg image", "when": "about", "x": 136, "y": 128}, {"color": "#111820", "kind": "text", "size": 12, "text": "Custom hardware planes: vision, touch, keys, pulse, store", "when": "about", "x": 136, "y": 158}, {"color": "#111820", "kind": "text", "size": 12, "text": "No PC bus, BIOS, Unix ABI, or commodity CPU ISA", "when": "about", "x": 136, "y": 188}, {"h": 360, "id": "notes", "kind": "panel", "title": "Notes", "w": 560, "x": 112, "y": 78}, {"h": 238, "id": "notes", "kind": "field", "w": 512, "when": "notes", "x": 136, "y": 128}, {"h": 34, "id": "focus_notes", "intent": "focus_notes", "kind": "button", "label": "Edit", "w": 126, "when": "notes", "x": 136, "y": 382}, {"h": 34, "id": "clear_notes", "intent": "clear_notes", "kind": "button", "label": "Clear", "w": 126, "when": "notes", "x": 276, "y": 382}, {"h": 310, "id": "system", "kind": "panel", "title": "System", "w": 500, "x": 112, "y": 78}, {"h": 24, "kind": "meter", "label": "Vision plane", "value": 0.74, "w": 330, "when": "system", "x": 138, "y": 138}, {"h": 24, "kind": "meter", "label": "Store plane", "value": 0.22, "w": 330, "when": "system", "x": 138, "y": 184}, {"h": 24, "kind": "meter", "label": "Pulse load", "value": 0.36, "w": 330, "when": "system", "x": 138, "y": 230}, {"h": 34, "id": "toggle_theme", "intent": "toggle_theme", "kind": "button", "label": "Theme", "w": 150, "when": "system", "x": 138, "y": 286}]}}, "state": {"active": "about", "focused": "", "notes": "NovaDesk notes are stored in the custom keeper plane.", "theme": "day"}};
+const state = structuredClone(imagePayload.state);
+const widgets = imagePayload.scenes[imagePayload.boot].widgets;
+const canvas = document.getElementById("screen");
+const ctx = canvas.getContext("2d");
+const logical = {w: 960, h: 600};
+
+function resize() {
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.floor(window.innerWidth * dpr);
+  canvas.height = Math.floor(window.innerHeight * dpr);
+  ctx.setTransform(canvas.width / logical.w, 0, 0, canvas.height / logical.h, 0, 0);
+  draw();
+}
+
+function visible(widget) {
+  if (widget.when && widget.when !== state.active) return false;
+  if (widget.kind === "panel" && widget.id !== state.active) return false;
+  return true;
+}
+
+function hit(widget, x, y) {
+  return x >= (widget.x || 0) && x <= (widget.x || 0) + (widget.w || 0) &&
+    y >= (widget.y || 0) && y <= (widget.y || 0) + (widget.h || 0);
+}
+
+function intent(name) {
+  if (["about", "notes", "system"].includes(name)) {
+    state.active = name;
+    state.focused = name === "notes" ? "notes" : "";
+  } else if (name === "focus_notes") {
+    state.focused = "notes";
+  } else if (name === "clear_notes") {
+    state.notes = "";
+    state.focused = "notes";
+  } else if (name === "toggle_theme") {
+    state.theme = state.theme === "day" ? "night" : "day";
+  }
+  draw();
+}
+
+function tap(clientX, clientY) {
+  const r = canvas.getBoundingClientRect();
+  const x = (clientX - r.left) * logical.w / r.width;
+  const y = (clientY - r.top) * logical.h / r.height;
+  const list = widgets.filter(visible).reverse();
+  for (const widget of list) {
+    if (!hit(widget, x, y)) continue;
+    if (widget.intent) return intent(widget.intent);
+    if (widget.kind === "field") state.focused = widget.id;
+  }
+  draw();
+}
+
+function draw() {
+  ctx.fillStyle = state.theme === "night" ? "#20262d" : "#dfe7e4";
+  ctx.fillRect(0, 0, logical.w, logical.h);
+  for (const widget of widgets.filter(visible)) drawWidget(widget);
+}
+
+function drawWidget(w) {
+  if (w.kind === "bar" || w.kind === "rail") {
+    ctx.fillStyle = w.color; ctx.fillRect(w.x, w.y, w.w, w.h);
+  } else if (w.kind === "text") {
+    ctx.fillStyle = w.color; ctx.font = `${w.size || 12}px system-ui`; ctx.fillText(w.text, w.x, w.y + (w.size || 12));
+  } else if (w.kind === "button") {
+    ctx.fillStyle = "#f5f7f8"; ctx.strokeStyle = "#637180"; ctx.lineWidth = 1;
+    ctx.fillRect(w.x, w.y, w.w, w.h); ctx.strokeRect(w.x, w.y, w.w, w.h);
+    ctx.fillStyle = "#121820"; ctx.font = "700 11px system-ui"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ctx.fillText(w.label, w.x + w.w / 2, w.y + w.h / 2); ctx.textAlign = "start"; ctx.textBaseline = "alphabetic";
+  } else if (w.kind === "panel") {
+    ctx.fillStyle = "#fbfcfc"; ctx.strokeStyle = "#8ea0a7"; ctx.fillRect(w.x, w.y, w.w, w.h); ctx.strokeRect(w.x, w.y, w.w, w.h);
+    ctx.fillStyle = "#e7eeee"; ctx.fillRect(w.x, w.y, w.w, 38); ctx.strokeRect(w.x, w.y, w.w, 38);
+    ctx.fillStyle = "#17212b"; ctx.font = "700 13px system-ui"; ctx.fillText(w.title, w.x + 16, w.y + 25);
+  } else if (w.kind === "field") {
+    ctx.fillStyle = "#fff"; ctx.strokeStyle = state.focused === w.id ? "#2f7366" : "#9aa8ad"; ctx.lineWidth = state.focused === w.id ? 2 : 1;
+    ctx.fillRect(w.x, w.y, w.w, w.h); ctx.strokeRect(w.x, w.y, w.w, w.h);
+    ctx.fillStyle = "#111820"; ctx.font = "14px ui-monospace, monospace";
+    wrap(String(state.notes || ""), 62).forEach((line, i) => ctx.fillText(line, w.x + 12, w.y + 26 + i * 18));
+  } else if (w.kind === "meter") {
+    ctx.fillStyle = "#1c2830"; ctx.font = "11px system-ui"; ctx.fillText(w.label, w.x, w.y - 6);
+    ctx.fillStyle = "#e7eeee"; ctx.strokeStyle = "#85959c"; ctx.fillRect(w.x, w.y, w.w, w.h); ctx.strokeRect(w.x, w.y, w.w, w.h);
+    ctx.fillStyle = "#3c8d7b"; ctx.fillRect(w.x, w.y, w.w * w.value, w.h);
+  }
+}
+
+function wrap(text, width) {
+  const out = [];
+  for (const raw of text.split("\n")) {
+    let line = raw;
+    while (line.length > width) { out.push(line.slice(0, width)); line = line.slice(width); }
+    out.push(line);
+  }
+  return out;
+}
+
+canvas.addEventListener("pointerdown", e => tap(e.clientX, e.clientY));
+window.addEventListener("keydown", e => {
+  if (state.focused !== "notes") return;
+  if (e.key === "Backspace") state.notes = String(state.notes || "").slice(0, -1);
+  else if (e.key === "Enter") state.notes = String(state.notes || "") + "\n";
+  else if (e.key.length === 1) state.notes = String(state.notes || "") + e.key;
+  else return;
+  e.preventDefault(); draw();
+});
+window.addEventListener("resize", resize);
+resize();
+</script>
+</body>
+</html>
